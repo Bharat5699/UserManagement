@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--  main-fragment (title, otherStaticResources, header, nav, mainContent, footer)  -->
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #address-static-resources},
+                                                ~{:: #address-main-content}  
+                                               )}">
+
+<head>
+<title>Update address</title>
+<th:block id="address-static-resources">
+</th:block>
+</head>
+<body>
+
+	<div id="address-main-content" class="container">
+		<form th:action="@{/users/address/updateAddressAction}" th:object="${address}"
+			method="post">
+			<div class="container">
+				<div class="card">
+					<div class="card-header">
+						<h2>Update Address</h2>
+						<div th:if="${success}">
+							<div class="alert alert-info">Address Updated successfully</div>
+						</div>
+
+					</div>
+					<div class="card-body">
+
+
+						<div class="row">
+							<div class="col-md-6 ">
+								<div class="mb-3">
+									<label class="form-label">Line 1</label> <input type="text"
+										class="form-control" id="line1" name="line1"
+										th:field="*{line1}">
+										<input type="hidden"
+										class="form-control" id="id" name="id"
+										th:field="*{id}">
+									<p class="error-message"
+										th:each="error : ${#fields.errors('line1')}"
+										th:text="${error}">Validation error</p>
+								</div>
+							</div>
+							<div class="col-md-6 ">
+								<div class="mb-3">
+									<label class="form-label">Line 2</label> <input type="text"
+										class="form-control" id="line2" name="line2"
+										th:field="*{line2}">
+									<p class="error-message"
+										th:each="error : ${#fields.errors('line2')}"
+										th:text="${error}">Validation error</p>
+								</div>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4 ">
+								<div class="mb-3">
+									<label class="form-label">State</label> <input type="text"
+										class="form-control" id="state" name="state"
+										th:field="*{state}">
+									<p class="error-message"
+										th:each="error : ${#fields.errors('state')}"
+										th:text="${error}">Validation error</p>
+								</div>
+							</div>
+							<div class="col-md-4 ">
+								<div class="mb-3">
+									<label class="form-label">City</label> <input type="text"
+										class="form-control" id="city" name="city" th:field="*{city}">
+									<p class="error-message"
+										th:each="error : ${#fields.errors('city')}" th:text="${error}">Validation
+										error</p>
+								</div>
+							</div>
+							<div class="col-md-4 ">
+								<div class="mb-3">
+									<label class="form-label">Pincode</label> <input type="text"
+										class="form-control" id="pincode" name="pincode"
+										th:field="*{pincode}">
+									<p class="error-message"
+										th:each="error : ${#fields.errors('pincode')}"
+										th:text="${error}">Validation error</p>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="card-footer">
+						<div class="text-center">
+							<button type="submit" al class="btn btn-primary">Update</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	
+	
+</body>
+</html>

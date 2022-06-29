@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--  main-fragment (title, otherStaticResources, header, nav, mainContent, footer)  -->
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #users-static-resources},
+                                                ~{:: #users-main-content}  
+                                               )}">
+                                              
+<head>
+    <title>List Users</title>
+    <th:block id="users-static-resources">
+    </th:block>
+         
+</head>
+<body>
+
+    <div id="users-main-content" class="container">
+    <form th:action="@{/users/searchUser}" method="post">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+    <div class="card">
+						<div class="card-header">
+							<h2>Search User</h2>
+							<div th:if="${success}">
+								<div class="alert alert-info">You've successfully
+									registered to our awesome app!</div>
+							</div>
+
+						</div>
+						<div class="card-body">
+							<div class="mb-3">
+							<div class="mb-3">
+								<label class="form-label">Name</label> <input type="text"
+									class="form-control" id="name" name="name" th:value="${name}">
+							</div>
+							
+						</div>
+						<div class="card-footer">
+							<div class="text-center">
+								<button type="submit"  class="btn btn-primary">Search</button>
+							</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					</form>
+					
+					<br>
+					<br>
+    <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Sr no.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">DOB</th>
+      <th scope="col">Mobile Number</th>
+      <th scope="col">Gender</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+   <tr th:each="user, state : ${users}">
+          <th scope="row" th:utext="${state.count}">index</th>
+          <td th:utext="${user.name}">name</td>
+          <td th:utext="${user.email}">email</td>
+          <td th:utext="${user.dob}">dob</td>
+          <td th:utext="${user.mobileNo}">mobile number</td>
+          <td th:utext="${user.gender}">gender</td>
+          <td th:utext="${user.action}">action</td>
+        </tr>
+        <tr th:if="${users.size()==0}">
+				<td colspan="7" style="text-align: center">No Records Found</td>
+				</tr>
+  </tbody>
+</table>
+
+<form th:action="@{/users/updateUserData}" id="editForm" method="post">
+		<input type="hidden" id="editUsername" name="editUsername">
+		</form>
+		<form th:action="@{/users/deleteUser}" id="deleteForm" method="post">
+		<input type="hidden" id="deleteUsername" name="deleteUsername">
+		</form>
+		
+		
+		<script type="text/javascript">
+			
+		function deleteUser(id){
+			if (confirm("Are you sure you want to delete!") == true) {
+				$("#deleteUsername").val(id);
+				$("#deleteForm").submit();
+			}
+		}
+		
+		function editUser(id){
+			$("#editUsername").val(id);
+			$("#editForm").submit();
+		}
+		
+		</script>
+		
+    </div>
+</body>
+</html>

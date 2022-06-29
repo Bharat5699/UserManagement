@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!--  main-fragment (title, otherStaticResources, header, nav, mainContent, footer)  -->
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #address-static-resources},
+                                                ~{:: #address-main-content}  
+                                               )}">
+
+<head>
+<title>Add address</title>
+<th:block id="address-static-resources">
+</th:block>
+</head>
+<body>
+
+	<div id="address-main-content" class="container">
+		<form id="addressForm" th:action="@{/users/address/}" 
+			method="post">
+			<div class="container">
+				<div class="card">
+					<div class="card-header">
+						<h2>Add Address</h2>
+						<div th:if="${success}">
+							<div class="alert alert-info">Address added successfully</div>
+						</div>
+
+					</div>
+					<div class="card-body">
+					<div id="mainAddressDiv">
+					<div id="address1">
+					<div>
+					<h3 id="header1">Address 1</h3>
+					
+					</div>
+						<div class="row">
+							<div class="col-md-6 ">
+								<div class="mb-3">
+									<label class="form-label">Line 1</label> <input type="text"
+										class="form-control" id="line11" name="line11"
+										>
+									<p class="error-message"
+										th:text="${error}">Validation error</p>
+								</div>
+							</div>
+							<div class="col-md-6 ">
+								<div class="mb-3">
+									<label class="form-label">Line 2</label> <input type="text"
+										class="form-control" id="line21" name="line21"
+										>
+									<p class="error-message"
+										th:text="${error}">Validation error</p>
+								</div>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4 ">
+								<div class="mb-3">
+									<label class="form-label">State</label> <input type="text"
+										class="form-control" id="state1" name="state1"
+										>
+									<p class="error-message"
+										th:text="${error}">Validation error</p>
+								</div>
+							</div>
+							<div class="col-md-4 ">
+								<div class="mb-3">
+									<label class="form-label">City</label> <input type="text"
+										class="form-control" id="city1" name="city1" >
+									<p class="error-message"
+									    th:text="${error}">Validation
+										error</p>
+								</div>
+							</div>
+							<div class="col-md-4 ">
+								<div class="mb-3">
+									<label class="form-label">Pincode</label> <input type="text"
+										class="form-control" id="pincode1" name="pincode1"
+										>
+									<p class="error-message"
+										th:text="${error}">Validation error</p>
+								</div>
+							</div>
+						</div>
+						<div id="addButtonDiv1" style="display: flex;justify-content: flex-end;">
+							<button type="button" id="addButton1" class="btn btn-success" onclick="addAddress(1)">ADD</button>
+						</div>
+					</div>
+					</div>
+					</div>
+					<div class="card-footer">
+						<div class="text-center">
+							<button type="submit" onclick="saveAddress()" class="btn btn-primary">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" id="count" name="count" value="1">
+		</form>
+
+<br>
+<br>
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Sr no.</th>
+					<th scope="col">Line 1</th>
+					<th scope="col">Line 2</th>
+					<th scope="col">State</th>
+					<th scope="col">City</th>
+					<th scope="col">Pincode</th>
+					<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="address, state : ${addressList}">
+					<th scope="row" th:utext="${state.count}">index</th>
+					<td th:utext="${address.line1}">Line 1</td>
+					<td th:utext="${address.line2}">Line 2</td>
+					<td th:utext="${address.state}">State</td>
+					<td th:utext="${address.city}">City</td>
+					<td th:utext="${address.pincode}">Gender</td>
+					<td th:utext="${address.action}">action</td>
+				</tr>
+				<tr th:if="${addressList.size()==0}">
+				<td colspan="7" style="text-align: center">No Records Found</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<form th:action="@{/users/address/updateAddress}" id="editForm" method="post">
+		<input type="hidden" id="editAddressId" name="editAddressId">
+		</form>
+		<form th:action="@{/users/address/deleteAddress}" id="deleteForm" method="post">
+		<input type="hidden" id="deleteAddressId" name="deleteAddressId">
+		</form>
+		
+		
+		<script th:inline="javascript">
+		$( document ).ready(function() {
+		    alert([[${msg}]])
+		});
+		
+		function deleteAddress(id){
+			if (confirm("Are you sure you want to delete!") == true) {
+				$("#deleteAddressId").val(id);
+				$("#deleteForm").submit();
+			}
+		}
+		
+		function editAddress(id){
+			$("#editAddressId").val(id);
+			$("#editForm").submit();
+		}
+		
+		
+		function addAddress(count){
+			var index=count+1;
+			
+			$("#addButton"+count).remove();
+			if(count>1){
+				$("#removeButton"+count).remove();
+			}
+			
+			$("#mainAddressDiv").append('<div id="address'+index+'"> '+
+			'<div> '+
+			'<h3 id="header'+index+'">Address '+index+'</h3> '+
+			'</div> '+
+				'<div class="row"> '+
+				'	<div class="col-md-6 "> '+
+					'	<div class="mb-3"> '+
+							'<label class="form-label">Line 1</label> <input type="text" '+
+							'	class="form-control" id="line1'+index+'" name="line1'+index+'" '+
+							'	> '+
+						'</div> '+
+					'</div> '+
+					'<div class="col-md-6 "> '+
+						'<div class="mb-3"> '+
+							'<label class="form-label">Line 2</label> <input type="text" '+
+							'	class="form-control" id="line2'+index+'" name="line2'+index+'" '+
+						'		> '+
+						'</div> '+
+					'</div> '+
+				'</div> '+
+				'<div class="row"> '+
+				'	<div class="col-md-4 "> '+
+						'<div class="mb-3"> '+
+							'<label class="form-label">State</label> <input type="text" '+
+								' class="form-control" id="state'+index+'" name="state'+index+'" '+
+								'> '+
+						'</div> '+
+					'</div> '+
+					'<div class="col-md-4 "> '+
+						'<div class="mb-3"> '+
+							'<label class="form-label">City</label> <input type="text" '+
+							'	class="form-control" id="city'+index+'" name="city'+index+'" > '+
+						'</div> '+
+					'</div> '+
+					'<div class="col-md-4 "> '+
+						'<div class="mb-3"> '+
+							'<label class="form-label">Pincode</label> <input type="text" '+
+							'	class="form-control" id="pincode'+index+'" name="pincode'+index+'" '+
+							'	> '+
+						'</div> '+
+					'</div> '+
+				'</div> '+
+			'	<div id="addButtonDiv'+index+'" style="display: flex;justify-content: flex-end;"> '+
+				'	<button type="button" id="addButton'+index+'" class="btn btn-success" onclick="addAddress('+index+')">ADD</button> '+
+				'	<button type="button" id="removeButton'+index+'" class="btn btn-danger" onclick="removeAddress('+index+')">remove</button> '+
+				'</div>'+
+			'</div> ');
+			
+			$("#count").val(index);
+			
+		}
+		
+		 
+		function removeAddress(count){
+			var pre=count-1;
+			$("#addButtonDiv"+pre).append(
+			'	<button type="button" id="addButton'+pre+'" class="btn btn-success" onclick="addAddress('+pre+')">ADD</button> ');
+			if(pre>1){
+			$("#addButtonDiv"+pre).append('	<button type="button" id="removeButton'+pre+'" class="btn btn-danger" onclick="removeAddress('+pre+')">remove</button> ');
+			}
+			$("#address"+count).remove();
+			$("#count").val(pre);
+		}
+		
+		
+		function saveAddress(){
+			var data = $("#addressForm").serialize();
+			var count=$("#count").val();
+			for(var i=1;i<=count;i++){
+				if($("#line1"+i).val()==""){
+					alert("please Enter Line 1");
+					$("#line1"+i).focus();
+					return false;
+				}
+				if($("#line2"+i).val()==""){
+					alert("please Enter Line 2");
+					$("#line2"+i).focus();
+					return false;
+				}
+				if($("#state"+i).val()==""){
+					alert("please Enter State ");
+					$("#state"+i).focus();
+					return false;
+				}
+				if($("#city"+i).val()==""){
+					alert("please Enter City ");
+					$("#city"+i).focus();
+					return false;
+				}
+				if($("#pincode"+i).val()==""){
+					alert("please Enter Pincode");
+					$("#pincode"+i).focus();
+					return false;
+				}
+			}
+			
+			
+		}
+		
+		
+		</script>
+	</div>
+	
+	
+</body>
+</html>
